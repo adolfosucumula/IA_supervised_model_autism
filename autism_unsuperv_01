@@ -1,0 +1,107 @@
+
+
+import pandas as pd #toolbox to work with dataframes
+import numpy as np #toolbox to work with narrays
+import matplotlib.pyplot as plt #toolbox to do plots
+from sklearn.svm import SVC #load the support vector machine model functions
+from sklearn.model_selection import train_test_split #load the function to split train and test sets
+from sklearn import metrics # get the report
+from sklearn.metrics import classification_report # get the report
+from sklearn import preprocessing # normalize the features
+from sklearn.preprocessing import MinMaxScaler # normalize the features
+from sklearn.feature_selection import SelectKBest #load the feature selector model  
+from sklearn.feature_selection import chi2 #feature selector algorithm
+
+
+
+def normalized_data (df,t):
+
+    if (t==1):
+        d=df.copy() # min max normalization
+        for each_collum in range(0,df.shape[1]):
+            max =df.iloc[:,each_collum].max()
+            min =df.iloc[:,each_collum].min()
+            d.iloc[:,each_collum]=(d.iloc[:,each_collum]-min)/(max-min)
+    elif (t==2):
+        d=df.copy() # mean normalization
+        for each_collum in range(0,df.shape[1]):
+            max =df.iloc[:,each_collum].max()
+            min =df.iloc[:,each_collum].min()
+            mean =df.iloc[:,each_collum].mean()
+            d.iloc[:,each_collum]=(d.iloc[:,each_collum]-mean)/(max-min)
+    
+    else:
+        d=df.copy() # standardization
+        for each_collum in range(0,df.shape[1]):
+            mean =df.iloc[:,each_collum].mean()
+            std =df.iloc[:,each_collum].std()
+            d.iloc[:,each_collum]=(d.iloc[:,each_collum]-mean)/(std)
+
+    return d
+
+
+# 1st step database opening
+# MY CLASSES 
+from read_database import ReadDatabase as DB
+db = DB().getDatabase("/Users/Feti/Desktop/VBOX-001/PythonIAScript/CLASS/Autism_screening dataset.arff");
+
+df = pd.read_csv(db)
+
+df.columns = df.columns.str.replace("/",'_')
+df.rename(columns={"austim": "hasAUTISM"}, inplace=True)
+df.rename(columns={"jundice": "jaundice"}, inplace=True)
+df.rename(columns={"relation": "who_is_talking"}, inplace=True)
+
+df.loc[df.age=='?', 'age'] = 0
+df.age = df.age.astype(int)
+
+df = df.drop_duplicates()
+#print(df.shape)
+#print(df.isnull().sum())
+df = df.dropna()
+
+
+
+gender = {'m': 1, 'f': 0, '?': -1}
+df.gender = [gender[item] for item in df.gender]
+
+#print(df.jaundice)
+bornwithjaundice = {'yes': 1, 'no': 0}
+df.jaundice = [bornwithjaundice[item] for item in df.jaundice]
+
+familymemberwithpdd = {'YES': 1, 'NO': 0}
+df.Class_ASD = [familymemberwithpdd[item] for item in df.Class_ASD]
+#print(df.Class_ASD)
+
+useda_pp_before = {'yes': 1,'no': 0}
+df.used_app_before = [useda_pp_before[item] for item in df.used_app_before]
+
+whos_is_talking = {'Self': 1, 'Parent': 2, "'Health care professional'": 3, 'Relative': 4, 'Others': 5, '?': 6}
+df.who_is_talking = [whos_is_talking[item] for item in df.who_is_talking]
+
+#age = {'?': 0}
+#df.age = [age[item] for item in df.age]
+
+hasAUTISM = {'yes': 1,'no': 0}
+df.hasAUTISM = [hasAUTISM[item] for item in df.hasAUTISM]
+
+target = df.hasAUTISM
+
+
+X = df[['age', 'gender', 'jaundice', 'Class_ASD', 'used_app_before', 'who_is_talking', 
+      'A1_Score', 'A2_Score', 'A3_Score', 'A4_Score', 'A5_Score', 'A6_Score', 'A7_Score', 
+      'A8_Score', 'A9_Score', 'A10_Score']]
+
+
+#classes = df.iloc[:,-1].unique()
+#print(classes)
+
+
+t_label = df.iloc[:,-1]
+#remove target from database
+#df=df.iloc[:,:-1]
+
+
+
+
+

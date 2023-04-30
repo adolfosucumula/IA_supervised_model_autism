@@ -1,0 +1,6 @@
+class TestIAModel:
+    def __init__(self) -> None:
+        self.x_test = ''
+        self.x_train = '' 
+        self.y_train = ''   
+    pass

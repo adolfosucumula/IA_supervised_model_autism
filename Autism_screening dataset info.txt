@@ -1,0 +1,43 @@
+Attribute Information:
+d
+Attribute Type Description
+
+Age Number Age in years
+
+Gender String Male or Female
+
+Ethnicity String List of common ethnicities in text format
+
+Born with jaundice Boolean (yes or no) Whether the case was born with jaundice
+
+Family member with PDD Boolean (yes or no) Whether any immediate family member has a PDD
+
+Who is completing the test String Parent, self, caregiver, medical staff, clinician ,etc.
+
+Country of residence String List of countries in text format
+
+Used the screening app before Boolean (yes or no) Whether the user has used a screening app
+
+Screening Method Type Integer (0,1,2,3) The type of screening methods chosen based on age category (0=toddler, 1=child, 2= adolescent, 3= adult)
+
+Question 1 Answer Binary (0, 1) The answer code of the question based on the screening method used
+
+Question 2 Answer Binary (0, 1) The answer code of the question based on the screening method used
+
+Question 3 Answer Binary (0, 1) The answer code of the question based on the screening method used
+
+Question 4 Answer Binary (0, 1) The answer code of the question based on the screening method used
+
+Question 5 Answer Binary (0, 1) The answer code of the question based on the screening method used
+
+Question 6 Answer Binary (0, 1) The answer code of the question based on the screening method used
+
+Question 7 Answer Binary (0, 1) The answer code of the question based on the screening method used
+
+Question 8 Answer Binary (0, 1) The answer code of the question based on the screening method used
+
+Question 9 Answer Binary (0, 1) The answer code of the question based on the screening method used
+
+Question 10 Answer Binary (0, 1) The answer code of the question based on the screening method used
+
+Screening Score Integer The final score obtained based on the scoring algorithm of the screening method used. This was computed in an automated manner.
