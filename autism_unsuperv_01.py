@@ -87,21 +87,78 @@ df.hasAUTISM = [hasAUTISM[item] for item in df.hasAUTISM]
 
 target = df.hasAUTISM
 
-
 X = df[['age', 'gender', 'jaundice', 'Class_ASD', 'used_app_before', 'who_is_talking', 
       'A1_Score', 'A2_Score', 'A3_Score', 'A4_Score', 'A5_Score', 'A6_Score', 'A7_Score', 
       'A8_Score', 'A9_Score', 'A10_Score']]
 
-
-#classes = df.iloc[:,-1].unique()
-#print(classes)
-
-
-t_label = df.iloc[:,-1]
 #remove target from database
 #df=df.iloc[:,:-1]
 
+print(X)
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(16, 6))
+
+heatmap = sns.heatmap(abs(X.corr()), vmin=0, vmax=1, annot=True)
+heatmap.set_title('Correlation Heatmap', fontdict={'fontsize':12}, pad=12);
+plt.show()
+
+plt.figure(figsize=(8, 12))
+heatmap = sns.heatmap(X.corr()[['age']].sort_values(by='age', ascending=False), vmin=-1, vmax=1, annot=True, cmap='BrBG')
+heatmap.set_title('Features Correlating with Age', fontdict={'fontsize':18}, pad=16);
+plt.show()
+
+plt.figure(figsize=(8, 12))
+heatmap = sns.heatmap(X.corr()[['gender']].sort_values(by='gender', ascending=False), vmin=-1, vmax=1, annot=True, cmap='BrBG')
+heatmap.set_title('Features Correlating with Gender', fontdict={'fontsize':18}, pad=16);
+plt.show()
 
 
 
+# 3rd step - load and design the classifiers
+import matplotlib.pyplot as plt
+
+#The simplest, yet effective clustering algorithm. Needs to be provided with the number of clusters in advance, and assumes that the data is normalized as input (but use a PCA model as preprocessor).
+from sklearn.cluster import KMeans #K-Means Clustering
+
+# Can find better looking clusters than KMeans but is not scalable to high number of samples.
+from sklearn.cluster import MeanShift #K-Means Clustering
+
+#Clustering algorithm based on message passing between data points.
+from sklearn.cluster import AffinityPropagation #K-Means Clustering
+
+#KMeans applied to a projection of the normalized graph Laplacian: finds normalized graph cuts if the affinity matrix is interpreted as an adjacency matrix of a graph.
+from sklearn.cluster import SpectralClustering #K-Means Clustering
+
+from sklearn.cluster import AgglomerativeClustering #Hierarchical Clustering
+
+#Can detect irregularly shaped clusters based on density, i.e. sparse regions in the input space are likely to become inter-cluster boundaries. Can also detect outliers (samples that are not part of a cluster).
+from sklearn.cluster import DBSCAN #Density-Based Spatial Clustering of Applications with Noise
+
+
+def classifiers():
+    return [
+    KMeans(n_clusters=7),
+    MeanShift(bandwidth=1),
+    AffinityPropagation(),
+    SpectralClustering(n_clusters=7),
+    AgglomerativeClustering(n_clusters=7),
+    DBSCAN(eps=0.3, min_samples=7)
+]
+    
+cla=classifiers()
+y_pred=cla[0].fit_predict(X)
+
+from sklearn import metrics
+metrics.v_measure_score(y_pred, target)
+
+plt.scatter(X.iloc[:,0], X.iloc[:, 15], c=y_pred)
+plt.show()
+
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+print('Accuracy score: ', accuracy_score(target, y_pred))
+print(confusion_matrix(target, y_pred))
 

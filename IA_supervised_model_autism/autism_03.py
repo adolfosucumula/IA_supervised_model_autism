@@ -98,7 +98,7 @@ X = df[['age', 'gender', 'jaundice', 'Class_ASD', 'used_app_before', 'who_is_tal
     
 
 # Split X and target int X and Y test sets
-X_train, X_test, y_train, y_test =  train_test_split(X, target, test_size=0.2, random_state=10)
+X_train, X_test, y_train, y_test =  train_test_split(X, target, test_size=0.6, random_state=10)
 
 # Print number of observations X_train, X_test, y_train, y_test
 print("____________________X_TRAIN__________________")
