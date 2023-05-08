@@ -264,7 +264,7 @@ clfiers = classifiers.classifiers()
 
 for i in range(1,df.shape[1]):
     if(i<=16):
-        Xt,Xteste = feature_selector(X_train,y_train,X_test,2,i)
+        Xt,Xteste = feature_selector(X_train,y_train,X_test,4,i)
         ypred = classification(clfiers[3],Xt,y_train,Xteste)
         accuracy, precision, recall, f1 = classification_reports(y_test,ypred)
         perf_results[i-3]=[i,accuracy, precision, recall, f1]
